@@ -6,22 +6,16 @@ ARG GID=1000
 
 #######################
 
-ENV PATH $PATH:/opt/tc32/bin 
-
-RUN groupadd -g $GID -o $USER
-RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USER
-
-RUN mkdir /app
-RUN chown $UID:$GID /app
-
-RUN apt-get update \
+RUN groupadd -g $GID -o $USER \
+	&& useradd -m -u $UID -g $GID -o -s /bin/bash $USER \
+	&& mkdir /app \
+	&& chown $UID:$GID /app \
+	&& apt-get update \
 	&& apt-get -y install --no-install-recommends \
-			python3 python3-serial make \
+			python3 python3-serial make wget bzip2 \
 	&& rm -rf /var/lib/apt/lists/*
 
 USER $USER
-
-ADD tc32_gcc.tar.bz2 /opt/
 
 WORKDIR /app
 
